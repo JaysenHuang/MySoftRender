@@ -137,3 +137,5 @@ void Shader::setViewMatrix(const glm::mat4& view) {
 void Shader::setProjectMatrix(const glm::mat4& project) {
 	ProjectMatrix = project;
 }
+
+

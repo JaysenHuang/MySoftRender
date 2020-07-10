@@ -9,9 +9,8 @@
 #include <stdio.h>
 #include <string>
 #include <cmath>
+
 #include"Math.h"
-
-
 
 //Starts up SDL and creates window
 extern bool init();
@@ -117,6 +116,7 @@ public:
 
 
 
+
 void ScanLine(const V2F& left, const V2F& right);
 
 void UpTriangle(const V2F& v1, const V2F& v2, const V2F& v3);
@@ -125,4 +125,5 @@ void DownTriangle(const V2F& v1, const V2F& v2, const V2F& v3);
 
 void ScanLineTriangle(const V2F& v1, const V2F& v2, const V2F& v3);
 
+//void DrawMesh(const Mesh& mesh);
 #endif // 

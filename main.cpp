@@ -1,14 +1,24 @@
 #include "SoftRender\graphic.h"
 #include "SoftRender\setting.h"
+#include "SoftRender\draw.h"
 //Screen dimension constants
 
+const int SCREEN_WIDTH = 640;
+const int SCREEN_HEIGHT = 480;
+SDL_Window* gWindow = NULL;
 
+//The window renderer
+SDL_Renderer* gRenderer = NULL;
+
+Shader shader;
+
+FrameBuffer FrontBuffer;
+
+glm::mat4 ViewPortMatrix;
 void SDLDrawPixel(int x, int y)
 {
     SDL_RenderDrawPoint(gRenderer, x, SCREEN_HEIGHT - 1 - y);
 }
-
-
 
 void UpTriangle(const V2F& v1, const V2F& v2, const V2F& v3) {
     V2F left, right, top;
@@ -103,7 +113,6 @@ void ScanLine(const V2F& left, const V2F& right) {
     }
 }
 
-
 bool init()
 {
     //Initialization flag
@@ -172,12 +181,12 @@ int main(int argc, char* args[])
 
             //Event handler
             SDL_Event e;
-			glm::mat4 ViewPortMatrix = GetViewPortMatrix(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+			ViewPortMatrix = GetViewPortMatrix(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 			FrontBuffer.Resize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 
 			Vertex V1(glm::vec3(-0.5, -0.5, 0), glm::vec4(255, 0, 0, 0), glm::vec2(0,0), glm::vec3(0, 0,0));
-			Vertex V2(glm::vec3(0.5, 0.5, 0), glm::vec4(255, 255, 255, 0), glm::vec2(0, 0), glm::vec3(0, 0, 0));
+			Vertex V2(glm::vec3(0.5, 0.5, 0), glm::vec4(0, 255, 0, 0), glm::vec2(0, 0), glm::vec3(0, 0, 0));
 			Vertex V3(glm::vec3(-0.5, 0.5, 0), glm::vec4(0,0, 255, 0), glm::vec2(0, 0), glm::vec3(0, 0, 0));
 
 			V2F o1 = shader.VertexShader(V1);

@@ -1,92 +1,92 @@
 ﻿  main.cpp
-C:\Users\Administrator\source\repos\SoftRender\main.cpp(18,27): warning C4244: “=”: 从“int”转换到“T”，可能丢失数据
+C:\Users\jiasheng.huang\Desktop\MySoftRender-master\main.cpp(28,27): warning C4244: “=”: 从“int”转换到“T”，可能丢失数据
           with
           [
               T=float
           ]
-C:\Users\Administrator\source\repos\SoftRender\main.cpp(19,12): warning C4244: “初始化”: 从“T”转换到“int”，可能丢失数据
+C:\Users\jiasheng.huang\Desktop\MySoftRender-master\main.cpp(29,12): warning C4244: “初始化”: 从“T”转换到“int”，可能丢失数据
           with
           [
               T=float
           ]
-C:\Users\Administrator\source\repos\SoftRender\main.cpp(20,14): warning C4244: “初始化”: 从“T”转换到“int”，可能丢失数据
+C:\Users\jiasheng.huang\Desktop\MySoftRender-master\main.cpp(30,14): warning C4244: “初始化”: 从“T”转换到“int”，可能丢失数据
           with
           [
               T=float
           ]
-C:\Users\Administrator\source\repos\SoftRender\main.cpp(29,34): warning C4244: “=”: 从“int”转换到“T”，可能丢失数据
+C:\Users\jiasheng.huang\Desktop\MySoftRender-master\main.cpp(39,34): warning C4244: “=”: 从“int”转换到“T”，可能丢失数据
           with
           [
               T=float
           ]
-C:\Users\Administrator\source\repos\SoftRender\main.cpp(30,35): warning C4244: “=”: 从“int”转换到“T”，可能丢失数据
+C:\Users\jiasheng.huang\Desktop\MySoftRender-master\main.cpp(40,35): warning C4244: “=”: 从“int”转换到“T”，可能丢失数据
           with
           [
               T=float
           ]
-C:\Users\Administrator\source\repos\SoftRender\main.cpp(31,54): warning C4244: “=”: 从“int”转换到“T”，可能丢失数据
+C:\Users\jiasheng.huang\Desktop\MySoftRender-master\main.cpp(41,54): warning C4244: “=”: 从“int”转换到“T”，可能丢失数据
           with
           [
               T=float
           ]
-C:\Users\Administrator\source\repos\SoftRender\main.cpp(42,12): warning C4244: “初始化”: 从“T”转换到“int”，可能丢失数据
+C:\Users\jiasheng.huang\Desktop\MySoftRender-master\main.cpp(52,12): warning C4244: “初始化”: 从“T”转换到“int”，可能丢失数据
           with
           [
               T=float
           ]
-C:\Users\Administrator\source\repos\SoftRender\main.cpp(43,14): warning C4244: “初始化”: 从“T”转换到“int”，可能丢失数据
+C:\Users\jiasheng.huang\Desktop\MySoftRender-master\main.cpp(53,14): warning C4244: “初始化”: 从“T”转换到“int”，可能丢失数据
           with
           [
               T=float
           ]
-C:\Users\Administrator\source\repos\SoftRender\main.cpp(52,34): warning C4244: “=”: 从“int”转换到“T”，可能丢失数据
+C:\Users\jiasheng.huang\Desktop\MySoftRender-master\main.cpp(62,34): warning C4244: “=”: 从“int”转换到“T”，可能丢失数据
           with
           [
               T=float
           ]
-C:\Users\Administrator\source\repos\SoftRender\main.cpp(53,35): warning C4244: “=”: 从“int”转换到“T”，可能丢失数据
+C:\Users\jiasheng.huang\Desktop\MySoftRender-master\main.cpp(63,35): warning C4244: “=”: 从“int”转换到“T”，可能丢失数据
           with
           [
               T=float
           ]
-C:\Users\Administrator\source\repos\SoftRender\main.cpp(54,54): warning C4244: “=”: 从“int”转换到“T”，可能丢失数据
+C:\Users\jiasheng.huang\Desktop\MySoftRender-master\main.cpp(64,54): warning C4244: “=”: 从“int”转换到“T”，可能丢失数据
           with
           [
               T=float
           ]
-C:\Users\Administrator\source\repos\SoftRender\main.cpp(95,16): warning C4244: “初始化”: 从“T”转换到“int”，可能丢失数据
+C:\Users\jiasheng.huang\Desktop\MySoftRender-master\main.cpp(105,16): warning C4244: “初始化”: 从“T”转换到“int”，可能丢失数据
           with
           [
               T=float
           ]
-C:\Users\Administrator\source\repos\SoftRender\main.cpp(101,151): warning C4244: “参数”: 从“T”转换到“Uint8”，可能丢失数据
+C:\Users\jiasheng.huang\Desktop\MySoftRender-master\main.cpp(111,151): warning C4244: “参数”: 从“T”转换到“Uint8”，可能丢失数据
           with
           [
               T=float
           ]
-C:\Users\Administrator\source\repos\SoftRender\main.cpp(101,123): warning C4244: “参数”: 从“T”转换到“Uint8”，可能丢失数据
+C:\Users\jiasheng.huang\Desktop\MySoftRender-master\main.cpp(111,123): warning C4244: “参数”: 从“T”转换到“Uint8”，可能丢失数据
           with
           [
               T=float
           ]
-C:\Users\Administrator\source\repos\SoftRender\main.cpp(101,95): warning C4244: “参数”: 从“T”转换到“Uint8”，可能丢失数据
+C:\Users\jiasheng.huang\Desktop\MySoftRender-master\main.cpp(111,95): warning C4244: “参数”: 从“T”转换到“Uint8”，可能丢失数据
           with
           [
               T=float
           ]
-C:\Users\Administrator\source\repos\SoftRender\main.cpp(101,67): warning C4244: “参数”: 从“T”转换到“Uint8”，可能丢失数据
+C:\Users\jiasheng.huang\Desktop\MySoftRender-master\main.cpp(111,67): warning C4244: “参数”: 从“T”转换到“Uint8”，可能丢失数据
           with
           [
               T=float
           ]
-C:\Users\Administrator\source\repos\SoftRender\main.cpp(102,48): warning C4244: “参数”: 从“T”转换到“int”，可能丢失数据
+C:\Users\jiasheng.huang\Desktop\MySoftRender-master\main.cpp(112,48): warning C4244: “参数”: 从“T”转换到“int”，可能丢失数据
           with
           [
               T=float
           ]
-C:\Users\Administrator\source\repos\SoftRender\main.cpp(102,33): warning C4244: “参数”: 从“T”转换到“int”，可能丢失数据
+C:\Users\jiasheng.huang\Desktop\MySoftRender-master\main.cpp(112,33): warning C4244: “参数”: 从“T”转换到“int”，可能丢失数据
           with
           [
               T=float
           ]
-  SoftRender.vcxproj -> C:\Users\Administrator\source\repos\SoftRender\Debug\SoftRender.exe
+  SoftRender.vcxproj -> C:\Users\jiasheng.huang\Desktop\MySoftRender-master\Debug\SoftRender.exe
