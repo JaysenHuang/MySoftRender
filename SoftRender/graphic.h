@@ -9,14 +9,15 @@
 #include <stdio.h>
 #include <string>
 #include <cmath>
-
 #include"Math.h"
+#include"Texture.h"
 
 //Starts up SDL and creates window
 extern bool init();
 
 //Frees media and shuts down SDL
 extern void close();
+
 
 //The window we'll be rendering to
 
@@ -26,8 +27,11 @@ class FrameBuffer {
 
 public:
 	int Width, Height;
-	std::vector<unsigned char> colorBuffer;
-	FrameBuffer();
+
+	std::vector<float> colorBuffer;
+	std::vector<float> depthBuffer;
+
+	
 	~FrameBuffer();
 
 	FrameBuffer(const int& w, const int& h);
@@ -36,7 +40,13 @@ public:
 
 	void ClearColorBuffer(const glm::vec4& color);
 
-	void WritePoint(const int& x, const int& y, const glm::vec4& color);
+	void ClearDepthBuffer();
+
+	void WritePoint(const int x, const int y, const glm::vec4 color, SDL_Renderer* gRenderer);
+
+	float GetDepth(const int& x, const int& y);
+
+	void WriteDepth(const int& x, const int& y, const float& depth);
 };
 
 class Vertex {
@@ -73,7 +83,7 @@ public:
 	glm::vec4 color;
 	glm::vec2 texcoord;
 	glm::vec3 normal;
-
+	float Z;	
 	V2F();
 
 	~V2F();
@@ -84,6 +94,7 @@ public:
 		const glm::vec4& _color,
 		const glm::vec2& _tex,
 		const glm::vec3& _normal
+		
 	);
 
 	V2F(const V2F& v);
@@ -104,7 +115,7 @@ private:
 public:
 	V2F VertexShader(const Vertex& a2v);
 	//现在直接输出点的颜色
-	glm::vec4 FragmentShader(const V2F& v);
+ //	glm::vec4 FragmentShader(const V2F& v);
 
 	void setModelMatrix(const glm::mat4& model);
 
@@ -112,6 +123,7 @@ public:
 
 	void setProjectMatrix(const glm::mat4& project);
 
+	glm::vec4 FragmentShader(const V2F& v,Texture texture);
 };
 
 
@@ -125,5 +137,6 @@ void DownTriangle(const V2F& v1, const V2F& v2, const V2F& v3);
 
 void ScanLineTriangle(const V2F& v1, const V2F& v2, const V2F& v3);
 
+void PerspectiveDivision(V2F& v);
 //void DrawMesh(const Mesh& mesh);
 #endif // 

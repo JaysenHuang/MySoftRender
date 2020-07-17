@@ -1,10 +1,12 @@
 #include "SoftRender\graphic.h"
 #include "SoftRender\setting.h"
 #include "SoftRender\draw.h"
+
+#include <ctime>
 //Screen dimension constants
 
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
+const int SCREEN_WIDTH = 1280;
+const int SCREEN_HEIGHT = 720;
 SDL_Window* gWindow = NULL;
 
 //The window renderer
@@ -12,9 +14,14 @@ SDL_Renderer* gRenderer = NULL;
 
 Shader shader;
 
-FrameBuffer FrontBuffer;
+FrameBuffer FrontBuffer(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-glm::mat4 ViewPortMatrix;
+Texture texture;
+
+glm::mat4 ViewPortMatrix = glm::mat4(1.0f);
+
+float fps;
+
 void SDLDrawPixel(int x, int y)
 {
     SDL_RenderDrawPoint(gRenderer, x, SCREEN_HEIGHT - 1 - y);
@@ -40,6 +47,7 @@ void UpTriangle(const V2F& v1, const V2F& v2, const V2F& v3) {
         newRight.windowPos.x = int(newRight.windowPos.x + 0.5);
         newLeft.windowPos.y = newRight.windowPos.y = nowY;
         ScanLine(newLeft, newRight);
+
         nowY--;
     }
 }
@@ -51,6 +59,7 @@ void DownTriangle(const V2F& v1, const V2F& v2, const V2F& v3) {
     bottom = v3;
     int dy = left.windowPos.y - bottom.windowPos.y;
     int nowY = left.windowPos.y;
+    
     //从上往下插值
     for (int i = 0; i < dy; i++) {
         float weight = 0;
@@ -64,10 +73,15 @@ void DownTriangle(const V2F& v1, const V2F& v2, const V2F& v3) {
         newLeft.windowPos.y = newRight.windowPos.y = nowY;
         ScanLine(newLeft, newRight);
         nowY--;
+       
     }
+   
+
+
 }
 
 void ScanLineTriangle(const V2F& v1, const V2F& v2, const V2F& v3) {
+
     std::vector<V2F> arr = { v1,v2,v3 };
     if (arr[0].windowPos.y > arr[1].windowPos.y) {
         V2F tmp = arr[0];
@@ -98,6 +112,7 @@ void ScanLineTriangle(const V2F& v1, const V2F& v2, const V2F& v3) {
         V2F newEdge = V2F::lerp(arr[2], arr[0], weight);
         UpTriangle(arr[1], newEdge, arr[2]);
         DownTriangle(arr[1], newEdge, arr[0]);
+
     }
 }
 
@@ -107,10 +122,28 @@ void ScanLine(const V2F& left, const V2F& right) {
         V2F v = V2F::lerp(left, right, (float)i / length);
         v.windowPos.x = left.windowPos.x + i;
         v.windowPos.y = left.windowPos.y;
+   
+        
+        
+        float depth = FrontBuffer.GetDepth(v.windowPos.x, v.windowPos.y);
 
-        SDL_SetRenderDrawColor(gRenderer, shader.FragmentShader(v).x, shader.FragmentShader(v).y, shader.FragmentShader(v).z, shader.FragmentShader(v).w);
-        SDLDrawPixel(v.windowPos.x, v.windowPos.y);
+        
+      //  FrontBuffer.ClearDepthBuffer(v.windowPos.x, v.windowPos.y);
+        if (v.windowPos.z < depth) {
+            float z = v.Z;
+            v.worldPos /= z;
+            v.texcoord /= z;
+            v.color /= z;
+            v.normal /= z;
+         FrontBuffer.WritePoint(v.windowPos.x, v.windowPos.y, shader.FragmentShader(v, texture),gRenderer);
+        //   SDL_SetRenderDrawColor(gRenderer, shader.FragmentShader(v, texture).x, shader.FragmentShader(v, texture).y, shader.FragmentShader(v, texture).z, shader.FragmentShader(v, texture).w);
+         //   SDLDrawPixel(v.windowPos.x, v.windowPos.y);
+          FrontBuffer.WriteDepth(v.windowPos.x, v.windowPos.y, v.windowPos.z);
+        } 
+        
+
     }
+
 }
 
 bool init()
@@ -133,7 +166,7 @@ bool init()
         }
 
         //Create window
-        gWindow = SDL_CreateWindow("SoftRender", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+        gWindow = SDL_CreateWindow("HuangBao's SoftRender", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
         if (gWindow == NULL)
         {
             printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
@@ -181,22 +214,49 @@ int main(int argc, char* args[])
 
             //Event handler
             SDL_Event e;
+            //加载贴图
+            texture.LoadTexture("GO");
+       
+          /*  int width, height, nrChannels;
+            unsigned char* data = stbi_load("C:\\Users\\jiasheng.huang\\Desktop\\\MySoftRender\\IMG_0093.PNG", &width, &height, &nrChannels, 0);
+            if (data)
+            {
+                std::cout << "load texture" << std::endl;
+            }
+            else
+            {
+                std::cout << "Failed to load texture" << std::endl;
+            }
+            stbi_image_free(data);
+            */
+          
+
+            //2D
 			ViewPortMatrix = GetViewPortMatrix(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-			FrontBuffer.Resize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
+            //3D
+            setViewMatrix(GetViewMatrix(glm::vec3(0, 0, 5), glm::vec3(0, 0, -1), glm::vec3(1, 0, 0), glm::vec3(0, 1, 0)));
+            setProjectMatrix(GetPerspectiveMatrix(glm::radians(60.0f), (float)SCREEN_WIDTH / SCREEN_HEIGHT, 0.3f, 100));
+		    FrontBuffer.Resize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-			Vertex V1(glm::vec3(-0.5, -0.5, 0), glm::vec4(255, 0, 0, 0), glm::vec2(0,0), glm::vec3(0, 0,0));
-			Vertex V2(glm::vec3(0.5, 0.5, 0), glm::vec4(0, 255, 0, 0), glm::vec2(0, 0), glm::vec3(0, 0, 0));
-			Vertex V3(glm::vec3(-0.5, 0.5, 0), glm::vec4(0,0, 255, 0), glm::vec2(0, 0), glm::vec3(0, 0, 0));
+            int start =  clock();
+        //绘制点
+	    //	Vertex V1(glm::vec3(-0.5, -0.5, 0), glm::vec4(255, 0, 0, 0), glm::vec2(0,0), glm::vec3(0, 0,0));
+		//	Vertex V2(glm::vec3(0.5, 0.5, 0), glm::vec4(0, 255, 0, 0), glm::vec2(0, 0), glm::vec3(0, 0, 0));
+		//	Vertex V3(glm::vec3(-0.5, 0.5, 0), glm::vec4(0,0, 255, 0), glm::vec2(0, 0), glm::vec3(0, 0, 0));       
 
-			V2F o1 = shader.VertexShader(V1);
-			V2F o2 = shader.VertexShader(V2);
-			V2F o3 = shader.VertexShader(V3);
+        //绘制box
+          Mesh Box = CreateBox(glm::vec3(0.0, 0.0, 0.0), 1.0f);
 
-			o1.windowPos = ViewPortMatrix * o1.windowPos;
-			o2.windowPos = ViewPortMatrix * o2.windowPos;
-			o3.windowPos = ViewPortMatrix * o3.windowPos;
+		  //  V2F o1 = shader.VertexShader(V1);
+			//V2F o2 = shader.VertexShader(V2);
+			//V2F o3 = shader.VertexShader(V3);
 
+            
+		   // o1.windowPos = ViewPortMatrix* o1.windowPos;
+			//o2.windowPos = ViewPortMatrix* o2.windowPos;
+		  //  o3.windowPos = ViewPortMatrix* o3.windowPos;
+          float angle = 120.0f;
             //While application is running
             while (!quit)
             {
@@ -209,15 +269,29 @@ int main(int argc, char* args[])
                         quit = true;
                     }
                 }
-
+                //fps
+                
+               int t1 = (clock()-start)/CLOCKS_PER_SEC;//程序段开始前取得系统运行时间(ms) 
+               fps++;
                 //Clear screen
-                SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 0xFF);
-                SDL_RenderClear(gRenderer);
+                std::cout << fps/(float)t1 << std::endl;
 
+
+                SDL_SetRenderDrawColor(gRenderer, 75, 75, 75, 255);
+                SDL_RenderClear(gRenderer);
+                FrontBuffer.ClearColorBuffer(glm::vec4(75, 75, 75, 255));
+                FrontBuffer.ClearDepthBuffer();
+             //   ScanLineTriangle(o1, o2, o3);
 				
                 //Rendering
-                ScanLineTriangle(o1, o2, o3);
-               
+              
+
+              setModelMatrix(glm::rotate(glm::mat4(1.0f), glm::radians(angle), glm::vec3(1.0, 1.0, 0.0)));
+             //   setViewMatrix(GetViewMatrix(glm::vec3(0, 0, 10+5*sin(fps/10)), glm::vec3(0, 0, -1), glm::vec3(1, 0, 0), glm::vec3(0, 1, 0)));
+                DrawMesh(Box);
+                Draw(gRenderer, shader, FrontBuffer, SCREEN_WIDTH, SCREEN_HEIGHT);
+                
+                angle += 5.0f;
 
                 //Update screen
                 SDL_RenderPresent(gRenderer);
